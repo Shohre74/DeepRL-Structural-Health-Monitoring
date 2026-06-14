@@ -1,84 +1,39 @@
-# Deep Reinforcement Learning for Structural Health Monitoring and Active Control
+# DeepRL-Structural-Health-Monitoring
 
-This repository presents a research-oriented implementation of Deep Reinforcement Learning (DRL) methods for structural health monitoring (SHM) and active vibration control of building structures.
+This project investigates the application of Deep Reinforcement Learning (DRL) for damage detection and active vibration control in a 5-DOF shear building model.
 
-The objective of this project is to investigate whether modern actor–critic reinforcement learning algorithms can reliably estimate structural damage and simultaneously provide effective vibration mitigation strategies within a physics-based simulation environment.
-
-The work is based on a 5-degree-of-freedom (5‑DOF) shear building model, where structural damage is simulated through controlled stiffness reduction at different floors.
-
-
-## Research Motivation
-
-Structural health monitoring traditionally relies on sensitivity-based or model-updating techniques. While these approaches can be effective, they may struggle in nonlinear or high-uncertainty scenarios.
-
-This research explores a data-driven alternative:
-
-- Can reinforcement learning agents learn structural behavior directly from vibration data?
-- Can a trained agent both detect damage and generate optimal control forces?
-
-The goal is not only algorithm comparison, but also understanding the behavior and stability of different DRL methods in structural engineering applications.
+The main goal is to evaluate how agents like SAC, TD3, and DDPG handle continuous state-action spaces in structural engineering tasks, specifically for estimating stiffness reduction and suppressing seismic-like vibrations.
 
 
 
-## Implemented Algorithms
+## Results & Analysis
 
-Three continuous-control actor–critic algorithms were implemented and evaluated:
-
-- **DDPG (Deep Deterministic Policy Gradient)**
-- **SAC (Soft Actor-Critic)**
-- **TD3 (Twin Delayed Deep Deterministic Policy Gradient)**
-
-Each agent was trained in a custom environment that models structural dynamics and stiffness degradation scenarios.
-
-
-
-## Damage Detection Results
-
-The agents were trained to estimate floor-wise stiffness reduction factors from vibration response data.
-
-Training performance is illustrated below:
+The training curves for the three implemented algorithms are shown below. Note that SAC and TD3 show more stable convergence compared to DDPG in this environment.
 
 | DDPG | SAC | TD3 |
 |------|-----|-----|
-| ![DDPG](figures/DDPG_Training_Curve.png) | ![SAC](figures/SAC_Training_Curve.png) | ![TD3](figures/TD3_Training_Curve.png) |
+| ![DDPG](DDPG_Training_Curve.png) | ![SAC](SAC_Training_Curve.png) | ![TD3](TD3_Training_Curve.png) |
 
-From the observed training behavior:
+### Active Control Performance
+The TD3 agent was used to generate control forces. The plot below compares the uncontrolled vs. controlled structural response:
 
-- SAC and TD3 demonstrate more stable convergence.
-- DDPG shows higher variance in prediction performance.
-- TD3 provides a strong balance between stability and accuracy.
+![Active Control](TD3_Active_Control_Response.png)
 
+### Baseline Comparison
+A classical sensitivity-based approach (NExT-PCA) was used as a benchmark for damage estimation:
 
-
-## Active Vibration Control
-
-A TD3-based controller was trained to minimize structural displacement under dynamic excitation.
-
-The following figure compares structural response with and without control:
-
-![Active Control](figures/TD3_Active_Control_Response.png)
-
-The controlled case shows noticeable reduction in peak displacement and faster vibration decay, demonstrating the feasibility of reinforcement learning for real-time structural control.
+![Classic Method](Classic_Method_Results.png)
 
 
 
-## Classical Baseline Comparison
+## Repository Content & Status
 
-For benchmarking purposes, a classical sensitivity-based method (NExT-PCA framework) was implemented.
+- **Code:** All RL environments and training scripts are implemented in the provided Jupyter Notebooks.
+- **Data:** The simulation dataset (100 scenarios) is available in `RL_Dataset.zip`.
+- **Note:** This repository represents ongoing research. Some specific hyperparameter configurations and internal utility scripts are withheld as the work is being prepared for journal submission.
 
-![Classic Method](figures/Classic_Method_Results.png)
-
-While the classical approach performs adequately in structured scenarios, the DRL-based framework offers improved adaptability in more complex dynamic conditions.
+All core logic and training pipelines were developed by the author.
 
 
-
-## Dataset
-
-The dataset consists of 100 simulated structural scenarios generated from the 5‑DOF building model.
-
-Each scenario includes:
-
-- Time-history vibration response data
-- Corresponding floor-wise stiffness reduction factors
-
-The dataset is provided in:
+## References
+This study builds upon the framework by Chen and Xu (2008) regarding integrated SHM and semi-active control. Detailed references are available in `docs/references.md`.
